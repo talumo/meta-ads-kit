@@ -9,17 +9,19 @@ Built with [OpenClaw](https://openclaw.ai) — the AI agent framework.
 
 ---
 
-**Daily Check → Fatigue Alerts → Bleeders & Winners → Budget Recommendations → Action (with approval)**
+**Monitor → Detect Fatigue → Find Winners → Shift Budget → Generate Copy → Upload to Meta → Repeat**
 
-This kit automates your daily Meta Ads management:
+This kit automates your entire Meta Ads workflow:
 
 - **Morning briefing** — Spend pacing, active campaigns, 7-day trends
 - **Find bleeders** — Ads with high spend + low CTR bleeding your budget
 - **Spot winners** — Top performers ready to scale
 - **Detect fatigue** — CTR declining, frequency climbing, CPC rising
+- **Generate copy** — AI writes ad copy matched to your actual image creatives
+- **Upload to Meta** — Push new ads straight to your account via Graph API
 - **Take action** — Pause, resume, adjust budgets (always with your approval)
 
-The result: A daily ad management routine that used to take 20+ minutes now takes 2.
+The result: A full ad management loop — from monitoring to creative refresh — without opening Ads Manager.
 
 ---
 
@@ -92,31 +94,47 @@ openclaw start
 | `meta-ads` | Core reporting — daily checks, campaign insights, bleeders, winners, fatigue detection |
 | `ad-creative-monitor` | Track creative performance over time, detect fatigue before it kills your ROAS |
 | `budget-optimizer` | Analyze spend efficiency, recommend budget shifts between campaigns/adsets |
+| `ad-copy-generator` | Generate ad copy matched to specific image creatives — analyzes the visual, writes copy that reinforces it, outputs `asset_feed_spec`-ready variants |
+| `ad-upload` | Push images and copy straight to Meta via Graph API — no Ads Manager copy-paste required |
 
 Each skill can run standalone or as part of the daily routine.
+
+### The Full Loop
+
+The five skills chain together into a closed loop:
+
+```
+Monitor (meta-ads) → Detect fatigue (ad-creative-monitor) → Shift budget (budget-optimizer)
+    → Generate new copy (ad-copy-generator) → Upload to Meta (ad-upload) → Monitor again
+```
+
+No Ads Manager required at any step.
 
 ---
 
 ## How It Works
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Daily Check   │────▶│   Find Patterns │────▶│  Recommendations│
-│   (5 questions) │     │   (AI analysis) │     │  (your approval)│
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-        │                       │                       │
-        ▼                       ▼                       ▼
-  Spend pacing            Bleeders 🩸              Pause losers
-  Active campaigns        Winners 🏆              Scale winners
-  7-day trends            Fatigue 😴              Shift budget
-  Ad performance          Anomalies ⚠️            New creatives
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│  Daily Check │───▶│   Patterns   │───▶│    Budget     │───▶│  Copy Gen    │───▶│   Upload     │
+│  (5 questions│    │  & Fatigue   │    │  Optimizer    │    │  (per image) │    │  (Graph API) │
+└──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+       │                   │                   │                   │                   │
+       ▼                   ▼                   ▼                   ▼                   ▼
+ Spend pacing        Bleeders 🩸         Shift budget       Copy matched to      Push ads live
+ Active campaigns    Winners 🏆          Scale winners      each creative        No Ads Manager
+ 7-day trends        Fatigue 😴          Cap losers         asset_feed_spec      Image + copy
 ```
 
 **Morning (automated via cron):**
-1. Run daily-check
-2. Flag bleeders (CTR < 1%, frequency > 3.5, CPA > threshold)
-3. Flag winners (top CTR, low CPC, scaling headroom)
-4. Send summary to Telegram/Slack/wherever
+1. Run daily-check — flag bleeders, winners, and fatigue
+2. Send strategist-level briefing to Slack/Telegram with recommendations and new creative concepts
+3. You approve from your phone
+
+**When you need new creatives:**
+1. Generate copy matched to specific image creatives
+2. Review the variants
+3. Upload directly to Meta — images, copy, and all
 
 **You (2 minutes over coffee):**
 1. Read the summary
@@ -218,9 +236,11 @@ meta-ads-kit/
 ├── .env.example           # Environment template
 ├── ad-config.example.json # Benchmarks template
 ├── skills/
-│   ├── meta-ads/          # Core reporting & actions
+│   ├── meta-ads/             # Core reporting & actions
 │   ├── ad-creative-monitor/  # Creative fatigue tracking
-│   └── budget-optimizer/  # Spend efficiency analysis
+│   ├── budget-optimizer/     # Spend efficiency analysis
+│   ├── ad-copy-generator/    # AI copy matched to image creatives
+│   └── ad-upload/            # Push ads to Meta via Graph API
 ├── SOUL.md                # Agent personality (for OpenClaw)
 ├── AGENTS.md              # Agent instructions
 └── SPEC.md                # Full system spec

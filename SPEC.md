@@ -87,6 +87,27 @@ Authenticate your ad account → Get daily briefings with bleeders, winners, and
 - Spend pacing checks
 - ROI comparison across campaigns
 
+### Skill 4: `ad-copy-generator`
+**Purpose:** Generate ad copy matched to specific image creatives
+
+**Capabilities:**
+- Analyze image creative (visual style, on-image text, concept, angle)
+- Cross-reference account performance data for winning copy patterns
+- Generate 3-5 headline variants (25-40 chars) + 3-5 body variants (50-120 words)
+- Output in `asset_feed_spec` format for Meta's Degrees of Freedom optimization
+- Apply brand voice from `workspace/brand/voice-profile.md`
+- Include psychology-driven hooks (social proof, fear of loss, status, etc.)
+
+### Skill 5: `ad-upload`
+**Purpose:** Push ads to Meta via Graph API without Ads Manager
+
+**Capabilities:**
+- Upload images to Meta ad account (returns image hashes)
+- Build `asset_feed_spec` creatives with multiple copy variants
+- Create ads in existing ad sets
+- Support all Meta placement sizes (Feed, Stories, Reels)
+- Link page and Instagram account for cross-placement delivery
+
 ---
 
 ## Data Flow
